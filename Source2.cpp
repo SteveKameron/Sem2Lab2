@@ -16,13 +16,16 @@ Massiv::Massiv(int n) {
 }
 
 Massiv::Massiv(int* data_new, int n) {
-	data = data_new;
+	data = new int[n];
+	for (int i = 0; i < n; i++) {
+		data[i] = data_new[i];
+	}
 	Size = n;
 }
 
 Massiv::Massiv() {
 	this->Size = 0;
-	this->data = new int[0];
+	this->data = nullptr;
 }
 
 Massiv::Massiv(const Massiv& Another_Massiv) {
@@ -33,39 +36,54 @@ Massiv::Massiv(const Massiv& Another_Massiv) {
 	}
 }
 
-Massiv& Massiv::operator ++(int value) {
+Massiv Massiv::operator ++(int value) {
+	Massiv mas = *this;
 	for (int i = 0; i < Size; i++) {
 		data[i]++;
 	}
-	return *this;
+	return mas;
 }
 
 Massiv::Massiv(Massiv&& Moved_Massiv) {
-	if (this != &Moved_Massiv) {
-		delete[] data;
-		data = Moved_Massiv.data;
-		Size = Moved_Massiv.Size;
-		Moved_Massiv.data = nullptr;
-		Moved_Massiv.Size = 0;
-	}
+	data = Moved_Massiv.data;
+	Size = Moved_Massiv.Size;
+	Moved_Massiv.data = nullptr;
+	Moved_Massiv.Size = 0;
+	//HERE
 }
 
 Massiv& Massiv::operator = (const Massiv& Another_Massiv) {
-	Size = Another_Massiv.Size;
-	data = new int[Size];
-	for (int i = 0; i < Size; i++) {
-		data[i] = Another_Massiv.data[i];
+	//memory leak
+	if (this->data != Another_Massiv.data) {
+		if (this->data != nullptr) {
+			delete[] data;
+		}
+		Size = Another_Massiv.Size;
+		data = new int[Size];
+		for (int i = 0; i < Size; i++) {
+			data[i] = Another_Massiv.data[i];
+		}
+		return *this;
 	}
-	return *this;
+	else {
+		return *this;
+	}
+
 }
 
 Massiv& Massiv::operator = (Massiv&& Moved_Massiv) {
-	if (this != &Moved_Massiv) {
-		delete[] data;
+	if (this->data != Moved_Massiv.data) {
+		if (this->data != nullptr) {
+			delete[] data;
+		}
 		data = Moved_Massiv.data;
 		Size = Moved_Massiv.Size;
 		Moved_Massiv.data = nullptr;
 		Moved_Massiv.Size = 0;
+	}
+	else {
+		std::cout << "HERE 1\n";
+
 	}
 	return *this;
 }
@@ -88,7 +106,10 @@ void Massiv::Print_To_File() {
 }
 
 Massiv::~Massiv() {
-	delete[] data;
+	if (data != nullptr) {
+		delete[] data;
+	}
+	std::cout << "Destructor\n";
 }
 
 

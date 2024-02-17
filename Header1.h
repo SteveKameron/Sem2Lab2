@@ -12,7 +12,7 @@ public:
 	Massiv(int* data_new, int n);
 	Massiv();
 	Massiv(const Massiv& Another_Massiv);
-	Massiv& operator ++(int value);
+	Massiv operator ++(int value);
 	Massiv(Massiv&& Moved_Massiv);
 	Massiv& operator = (const Massiv& Another_Massiv);
 	Massiv& operator = (Massiv&& Moved_Massiv);

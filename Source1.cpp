@@ -22,5 +22,18 @@ int main() {
 	MyMassiv.Print();
 	MyMassiv.Print_To_File();
 
+	int* a = new int[4];
+	for (int i = 0; i < 4; i++) {
+		a[i] = i;
+	}
+	Massiv A_a(a, 4);
+	Massiv A_b(a, 4);
+	A_a = Massiv(a, 4);
+	A_a = Massiv(A_a);
+	A_a.Print();
+	A_a = A_a;
+	A_a.Print();
+	A_a = A_b;
+	Massiv A, B(1), C(2);
 	return 0;
 }
